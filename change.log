@@ -1,0 +1,29 @@
+v0.9
+ - change name to funky 'SGCS', standing for 'Spatial Graph based Clustering Summaries'
+ - added doWeights flag for confun correction weights precalculation
+ - removed faulty Poisson estimate for cumconfun
+v0.8
+ - documentation
+ - clean up check warnings
+ - change name to 'howmanyedges'
+v0.7
+ - ?
+v0.6
+ - added poisson limits to all functions
+v0.5
+ - added poisson limits from poisson
+v0.4
+ - add documentation
+ - tests 
+ - clean up code
+ 
+v0.3
+ - add cumulative connectivity function
+
+v0.2
+ - add connectivity function
+ - change the Fun structure to more object oriented
+ - add the component finding part
+ - add fcl for plot
+v0.1
+ - start with only clustering function
