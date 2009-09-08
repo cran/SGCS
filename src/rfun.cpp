@@ -2,7 +2,7 @@
 #include "Fun.h"
 #include "Clustfun.h"
 #include "Confun.h"
-
+#include "Tfun.h"
 
 
 extern "C" {
@@ -89,7 +89,9 @@ SEXP fun_c(SEXP Args)
 	//	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *dbg0);
 	if(*dbg)printf("Init fun...");
 	Fun *fun;
-	if(*ftype==3)
+	if(*ftype==4)
+		fun = new Tfun;
+	else if(*ftype==3)
 		fun = new Clustfun;
 	else
 		fun = new Confun;

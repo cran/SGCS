@@ -4,15 +4,42 @@
 ###############################################################################
 
 
-confun<-function(pp, R=NULL, h=NULL, ...)
+confun<-function(X, r=NULL, R=NULL, h=NULL, ...)
 {
-	if(is.null(R)) R<-1/sqrt(summary(pp)$int)
+	# use a intensity related clustering parameter
+	if(is.null(R)) R<-1/sqrt(X$n/W.area(X$window))
+	
+	# the kernel bandwidth
 	if(is.null(h)) h<-0.15*R
 	
-	res<-art1Fun(pp=pp, funtype=1, fpar=c(R,h), ...)
+	# main calc
+	res<-spatial.graph.cluster.Fun(X, r=r, funtype=1, funpars=c(R,h), ...)
 	
-	data(confun_plims) # envelopes from Poisson 10000 simulations
-	plims<-confun_plims
-	plims$r<-plims$r*sqrt(200/summary(pp)$int)
-	graphfcl(list(confun=res$v, rvec=res$parvec, R=R, plims=plims, h=h, note="Connectivity function",note2=res$note2))
+	# TODO: Theoretical values, now envelopes from Poisson 10000 simulations 
+	#	data(confun_plims) # 
+	#	plims<-NULL#confun_plims
+	#	lambda<-pp$n/W.area(pp$window)
+	#	plims$r<-plims$r*sqrt(200/lambda)
+	
+	C.final<-fv( data.frame(C=res$v, r=res$r,theo=rep(NA,length(res$r))),
+			argu = "r",
+			alim = range(res$r),
+			ylab = substitute(C(r),NULL),
+			desc = c(paste("Connectivity Function with R=",R,"and h=",h,sep=""),"Parameter values","Theoretical values unknown"),
+			valu = "C",
+			fmla = ".~r",
+			fname="C"	
+	)
+	
+	# add clustering parameter
+	attr(C.final,"R") <- R
+	
+	# add bandwith parameter
+	attr(C.final,"h") <- h
+	
+# add additional notes
+	attr(C.final,"note") <- res$note
+	
+	#return
+	C.final
 }

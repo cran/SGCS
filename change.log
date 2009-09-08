@@ -1,3 +1,16 @@
+v1.3
+ - added the Schladitz-Baddeley 99 triplet intensity function T
+
+v1.2
+ - clean up names to be a proper R-package
+ - make dependent on 'spatstat' by using fv-classes
+ 
+v1.1
+ - remove more dependency on spatstat, confun used summary(ppp)
+ 
+v1.0
+ - cleaned up the code
+ - remove (some) dependency on spatstat for better 3d support
 v0.9
  - change name to funky 'SGCS', standing for 'Spatial Graph based Clustering Summaries'
  - added doWeights flag for confun correction weights precalculation

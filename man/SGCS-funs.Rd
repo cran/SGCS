@@ -1,15 +1,12 @@
 \name{SGCS-funs}
-\alias{graphfcl}
-\alias{art1Fun}
+\alias{spatial.graph.cluster.Fun}
 \alias{confun}
 \alias{cumconfun}
 \alias{clustfun}
-\alias{clustfun_plims}
-\alias{confun_plims}
-\alias{cumconfun_plims}
-\alias{minusID_sg}
-\alias{minusID_seg}
-
+\alias{Tfun}
+\alias{minusID.sg}
+\alias{minusID.seg}
+\alias{W.area}
 \title{
 Connectivity function, Cumulative Connectivity function and Clustering Function.
 }
@@ -17,62 +14,61 @@ Connectivity function, Cumulative Connectivity function and Clustering Function.
 \description{
 Statistical measures based on edges of a geometric graph structure over a given point pattern data.
   \tabular{ll}{
-    Date: \tab 2009-03-04\cr
+    Date: \tab 2009-09-08\cr
     License: \tab GPL v2 or later\cr
 }
 The graph structure is in this version geometric graph, meaning points \code{x} and \code{y} are connected
 if ||\code{x}-\code{y}||<\code{R} for the given range parameter \code{R}. Notice that in clustering function, the \code{R} equals to 
 the parameter \code{r}.
 
-The main function is \code{art1Fun}, but the use of shortcuts \code{confun}, \code{cumconfun} and \code{clustfun} is highly
+The main function is \code{spatial.graph.cluster.Fun}, but the use of shortcuts \code{confun}, \code{cumconfun} and \code{clustfun} is highly
 encouraged.
+
+In addition, the triplet intensity function T (Schladitz & Baddeley 2000) is also included for now: The \code{Tfun}.  
 }
 
 \usage{
-confun(pp, R=NULL, h=NULL, ...)
-cumconfun(pp, R=NULL, ...)
-clustfun(pp, ...)
-art1Fun(pp, r = NULL, funtype = 1, fpar = 0, toroidal = FALSE, dbg = FALSE, 
-        doDists = FALSE, doWeights = FALSE, prepR = 0, relative = FALSE, 
-        prepGraph = NULL, minusR = NULL, included = NULL, parvec = NULL)
+confun(X, r=NULL, R=NULL, h=NULL, ...)
+cumconfun(X, r=NULL, R=NULL, ...)
+clustfun(X, r=NULL, ...)
+Tfun(X, r=NULL, ...)
+spatial.graph.cluster.Fun(X, r=NULL, funtype=1, funpars=0, 
+						  minusRange=NULL, toroidal=FALSE,
+					      doDists=FALSE, doWeights=FALSE,  
+						  prepRange=0, prepGraph=NULL, dbg=FALSE)
 }
 
 \arguments{
-\item{pp}{All: Point pattern object. \code{ppp}-objects from package \code{spatstat} are safe.}
-\item{R}{confun, cumconfun: Connection radius of the graph. If NULL, R=1/sqrt(lambda).}
-\item{h}{confun: Smoothing parameter in kernel-estimation. Box kernel width = 2h.}
-\item{...}{Parametes for the function art1Fun:}
+\item{X}{All: Point pattern object of class \code{ppp} from package \code{spatstat}.}
 \item{r}{Vector of the range parameters in which to calculate the function value. 
          if NULL, a range from 0 to 1/3 of window length is used.}
-\item{funtype}{(shortcuts handle) Which function to calculate. confun=1, cumconfun=2, clustfun=3.}
-\item{fpar}{(shortcuts handle) Additional function parameter(s): confun fpar=c(R,h), cumconfun fpar=R.}
-\item{toroidal}{Toroidal correction of rectangular window.}
-\item{dbg}{Print additional messages.}
-\item{doDists}{Precalculate distances for faster computation. Be aware of memory consumption O(n\^2).}
-\item{doWeights}{Precalculate confun translation correction weights for faster computation. Be aware of memory consumption O(n\^2).}
-\item{prepR}{Preparation distance: If >0, precalculate a graph, from which it is easier to find needed connections. Useful with 
-             other graphs (in the future).}
-\item{relative}{Scale the range parameter to a unit range, i.e. scale r with sqrt(pi*lambda). Good when comparing different
-                phenomena in different spatial scales.}
+\item{R}{confun, cumconfun: Clustering radius of the graph. If NULL, R=1/sqrt(lambda).}
+\item{h}{confun: Smoothing parameter in kernel-estimation. Box kernel width = 2h. NULL-> h=0.15*R}
+\item{...}{Parametes for the function art1Fun:}
+\item{funtype}{(shortcuts handle) Which function to calculate. confun=1, cumconfun=2, clustfun=3, Tfun=4.}
+\item{funpars}{(shortcuts handle) Additional function parameter(s): confun fpar=c(R,h), cumconfun fpar=R.}
+\item{minusRange}{clustfun, Tfun: Minus-correction parameter. Rectangular window required, NULL means no correction.}
+\item{toroidal}{clustfun, Tfun: Toroidal correction of rectangular window.}
+\item{doDists}{Precalculate distances for faster computation. Be aware of memory consumption n*(n-1).}
+\item{doWeights}{confun,cumconfun: Precalculate translation correction weights for faster computation. Be aware of memory consumption O(n\^2).}
+\item{prepRange}{Preparation distance: If >0, precalculate a graph, from which it is easier to find needed connections. Useful with 
+             more complicated neighbourhoods than just the geometric (Maybe added in the future).}
 \item{prepGraph}{An optional graph-object from spatgraphs to be used as basis for finding connections between points. Good for big datasets.}
-\item{minusR}{Minus-correction parameter. Rectangular window required, NULL means no correction.}
-\item{included}{Point pattern size boolean vector for inclusion of points in computation. NULL means all points.}
-\item{parvec}{Same as \code{r}.}
+\item{dbg}{Print additional messages.}
 }
 
 \value{
- An object of class \code{graphfcl}, which can be plotted with the generic \code{plot}-command. Contains the given parameters and
- calculated function values, and an simulation based estimation of Poisson values. Note that the Poisson values (and the limits drawn
- if flag \code{limits}=TRUE) is correct only when the R=1/sqrt(lambda).
+Object of class \code{fv}, see \code{spatstat} for details. Has plot, envelope etc. nice methods.
 }
 \author{
 Tuomas Rajala\cr
 University of Jyvaskyla, Finland\cr
-tarajala@maths.jyu.fi
+tuomas.a.rajala@jyu.fi
 }
 
 \references{
 Rajala, Penttinen: Spatial clustering and graph feature statistics (working title).
+Schladitz, Baddeley: A Third order point process characteristic, SJS, vol 27, 657-671, 2000.
 }
 
 \keyword{ package }

@@ -3,6 +3,7 @@
  *        1   connectivity function
  *        2   cumulative connectivity function
  *        3   clustering function
+ *        4
  *
  * Supports Geometric graph and toroidal correction
  * TODO: k-nn graph, border correction
@@ -36,6 +37,7 @@ public:
 	virtual	void calculate(){};
 	virtual void calculateC(){};
 	virtual void calculateCC(){};
+	virtual void calculateT(){};
 };
 
 #endif /*FUN_H_*/
