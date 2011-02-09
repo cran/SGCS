@@ -32,7 +32,7 @@ double Graph::Weight2(int *i, int *j)
 /********************************************************************************************/
 void Graph::Init(Pp *pp0, int *gtype0, double *par0, double *prepR0, int *doDists0, int *doWeights0, int *toroidal0, int *dbg0)
 {
-	if(*dbg0)printf("intializing graph-object: ");
+//	if(*dbg0)printf("intializing graph-object: ");
 
 	pp = pp0;
 	par=par0;prepR=prepR0;
@@ -44,6 +44,7 @@ void Graph::Init(Pp *pp0, int *gtype0, double *par0, double *prepR0, int *doDist
 	nodelist.resize(*pp->n);
 	pdists = &distTriangle;
 	pweights = &weightTriangle;
+	given = 0;
 
 	gtype = gtype0;
 	pDist = &Graph::Dist1;  // calculate anew every time
@@ -57,7 +58,7 @@ void Graph::Init(Pp *pp0, int *gtype0, double *par0, double *prepR0, int *doDist
 	}
 
 
-	if(*dbg)printf("done.\n");
+//	if(*dbg)printf("done.\n");
 
 }
 /********************************************************************************************/
@@ -79,9 +80,12 @@ double Graph::Weight(int *i, int *j)
 /********************************************************************************************/
 void Graph::setNodelist(std::vector<std::vector<int> > *nodelist_new)
 {
+	if(*dbg)printf("Restoring given edges...");
 	nodelist.clear();
 	for(int i=0;i<(int)nodelist_new->size();i++)
 		nodelist.push_back(nodelist_new->at(i));
+	given = 1;
+	if(*dbg)printf("ok. ");
 }
 /********************************************************************************************/
 SEXP Graph::toSEXP()
@@ -136,8 +140,6 @@ void Graph::sg_calc()
 		else
 			this->sg_knn();
 	}
-	else if(*gtype==2) this->sg_gabriel();
-	else if(*gtype==3) this->sg_delauney();
 }
 
 /********************************************************************************************/
@@ -197,7 +199,10 @@ void Graph::sg_knn()
 	if(*prepR==0)// if not preprocessed
 	{
 		if(*dbg)printf("%i-nn: ",*k);
-		double dists2_i[*pp->n], dists2_i2[*pp->n];
+		int n = *pp->n;
+		double *dists2_i, *dists2_i2;
+		dists2_i = new double[n];
+		dists2_i2 = new double[n];
 		for(i=0;i<*pp->n;i++) //for each point
 		{
 			for(j=0;j<*pp->n;j++) dists2_i2[j]=dists2_i[j]= (this->*pDist)(&i,&j); //gather the distances to others
@@ -255,129 +260,5 @@ void Graph::sg_shrink_knn()
 }
 
 /********************************************************************************************/
-void Graph::sg_gabriel()
-{
-	if(*dbg)printf("Gabriel:");
-	int i,j,k, empty,m,l,h;
-	double x0,y0,R2, d;
-	std::vector<int> *node;
-
-	if(*this->prepR == 0) // no preprocessing done, heavy looping
-	  for(i=0;i<(*pp->n-1);i++)
-	  {
-		  for(j=i+1;j<*pp->n;j++)
-		  {
-			  x0 = fabs(pp->x[i]-pp->x[j])/2.0+fmin(pp->x[i],pp->x[j]);
-			  y0 = fabs(pp->y[i]-pp->y[j])/2.0+fmin(pp->y[i],pp->y[j]);
-			  R2 = ( pow(pp->x[i]-pp->x[j],2) + pow(pp->y[i]-pp->y[j],2) )/4.0;
-			  //		brute force
-			  empty = 1;
-			  for(k=0;k<*pp->n;k++)
-			  {
-				  if(k != i)
-					  if( k != j)
-					  {
-						  d = pow(x0-pp->x[k],2) + pow(y0-pp->y[k],2);
-						  if( d<R2 )
-						  {
-							  empty = 0;
-							  break;
-						  }
-					  }
-			  }
-			  if(empty)
-			  {
-				  this->nodelist[i].push_back(j+1);this->nodelist[j].push_back(i+1);
-			  }
-		  }
-	  }
-	else{ // preprocessed: nodelist has the restricted neighbourhoods to look trough
-		if(*dbg)printf("(prepd): ");
-		for(i = 0 ; i< *pp->n ;  i++)
-		{
-			node = new std::vector<int>;
-			for( l=0 ; l < (int)this->nodelist[i].size(); l++ )
-			{
-				j = this->nodelist[i][l]-1;
-				x0 = fabs(this->pp->x[i]-this->pp->x[j])/2.0+fmin(this->pp->x[i],this->pp->x[j]);
-				y0 = fabs(this->pp->y[i]-this->pp->y[j])/2.0+fmin(this->pp->y[i],this->pp->y[j]);
-				R2 = (pow(this->pp->x[i]-this->pp->x[j],2) + pow(this->pp->y[i]-this->pp->y[j],2) )/4.0;
-				empty = 1;
-				for(m=0; m < (int)this->nodelist[i].size();m++) // the small ball is included in the preprocessing ball
-				{
-					k = this->nodelist[i][m]-1;
-					if(k != i)
-						if( k != j)
-						{
-							d = pow(x0-pp->x[k],2) + pow(y0-pp->y[k],2);
-							if( d<R2 )
-							{
-								empty = 0;
-								break;
-							}
-						}
-				}
-				if(empty)
-				{
-					node->push_back(j+1);
-				}
-			}
-			nodelist[i].clear();
-			for(h=0;h<(int)node->size();h++) nodelist[i].push_back(node->at(h));
-			delete node;
-		}
-	}
-	  if(*dbg)printf(" Ok.");
-}
-
-/********************************************************************************************/
-void Graph::sg_delauney()
-{
-//Naive algorithm, checks the interiors of triangle circumcircles.
-//For 2D patterns
-
-	if(*dbg)printf("Delauney: ");
-	int i,j,k,l,h;
-	double dummy[2];
-	std::vector<int> *node;
-	if(*this->prepR==0) // no preprocessing done, heavy looping
-	{
-		if(*dbg)printf("(raw):");
-		for(i = 0 ; i< *pp->n-2 ; i++ )
-			for(j = i+1 ; j < *pp->n-1 ; j++ )
-				for(k = j+1 ; k < *pp->n ; k++ )
-					if( Empty(pp->x,pp->y,pp->n,i,j,k, dummy, dummy, dummy) )
-					{
-						nodelist[i].push_back(j+1);nodelist[i].push_back(k+1);
-						nodelist[j].push_back(i+1);nodelist[j].push_back(k+1);
-						nodelist[k].push_back(i+1);nodelist[k].push_back(j+1);
-					}
-	}
-	else{ // preprocessed: nodelist has the restricted neighbourhoods to look trough for triangles
-		if(*dbg)printf("(prepd): ");
-		for(i = 0 ; i< *pp->n ;  i++)
-		{
-			node = new std::vector<int>;
-			for( l=0 ; l < (int)nodelist[i].size()-1; l++ )
-			{
-				j = nodelist[i][l]-1;
-				for(h=l+1; h < (int)nodelist[i].size();h++ )
-				{
-					k = nodelist[i][h]-1;
-					if( Empty(pp->x,pp->y,pp->n,i,j,k,dummy, dummy, dummy) )
-					{
-						node->push_back(j+1);
-						node->push_back(k+1);
-					}
-				}
-			}
-			nodelist[i].clear();nodelist[i].resize(0);
-			for(h=0;h< (int)node->size();h++) nodelist[i].push_back((*node).at(h));
-			delete node;
-		}
-	}
-	if(*dbg)printf(" Ok.");
-
-}
 
 // EOF

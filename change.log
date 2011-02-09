@@ -1,3 +1,10 @@
+v1.5
+ - clean up warnings given by CRAN build check
+ 
+v1.4
+ - change the prepGraph to be the used component graph
+ - remove the useless prepR: k-nn very likely and gabriel/delauney always completely connected
+ 
 v1.3
  - added the Schladitz-Baddeley 99 triplet intensity function T
 

@@ -38,18 +38,22 @@ void Confun::calculate()
 
 	if(*dbg)
 	{
-		if(*ftype==1)printf("Connectivity function, R=%f, h=%f:\ngraph[",fpar[0],fpar[1]);
-		else printf("Cumulative connectivity function, R=%f:\ngraph[",fpar[0]);
+		if(*ftype==1)printf("Connectivity function, R=%f, h=%f:",fpar[0],fpar[1]);
+		else printf("Cumulative connectivity function, R=%f:",fpar[0]);
 	}
 
 	Components components; // start determining the pathwise connections, x~y
 
 	// calc the graph
-	*graph->par = fpar[0];
-	*graph->oldpar = *graph->par;
-
-	graph->sg_calc();
-	if(*dbg)printf("] components[");
+	if(graph->given != 1)
+	{
+		if(*dbg)printf("\ngraph[");
+		*graph->par = fpar[0];
+		*graph->oldpar = *graph->par;
+		graph->sg_calc();
+		if(*dbg)printf("] ");
+	}
+	if(*dbg)printf("\ncomponents[");
 	components.calculate(graph);
 	if(*graph->doWeights)
 	{

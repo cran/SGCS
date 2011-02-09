@@ -21,11 +21,11 @@ confun<-function(X, r=NULL, R=NULL, h=NULL, ...)
 	#	lambda<-pp$n/W.area(pp$window)
 	#	plims$r<-plims$r*sqrt(200/lambda)
 	
-	C.final<-fv( data.frame(C=res$v, r=res$r,theo=rep(NA,length(res$r))),
+	C.final<-fv( data.frame(C=res$v, r=res$r, theo=rep(NA,length(res$r))),
 			argu = "r",
 			alim = range(res$r),
 			ylab = substitute(C(r),NULL),
-			desc = c(paste("Connectivity Function with R=",R,"and h=",h,sep=""),"Parameter values","Theoretical values unknown"),
+			desc = c(paste("Connectivity Function with R=",R," and h=",h,sep=""),"Parameter values","Theoretical values unknown"),
 			valu = "C",
 			fmla = ".~r",
 			fname="C"	

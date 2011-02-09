@@ -12,7 +12,7 @@ SEXP fun_c(SEXP Args)
 
 	Pp pp;
 	Graph graph;
-	double *prepR, *fpar, *par, *parvec,R0=0.0, *pR0;
+	double prepR=0.0, *fpar, *par, *parvec,R0=0.0, *pR0;
 	int *gtype, *doDists, *doWeights, *toroidal, *ftype, *dbg, parn, *incl, prepG=0;
 	SEXP prepGraph;
 	pR0 = &R0;
@@ -46,18 +46,18 @@ SEXP fun_c(SEXP Args)
 	Args = CDR(Args);
 	toroidal = INTEGER(CAR(Args)); // if toroidal correction
 
-	if(*dbg)printf(".");
-	Args = CDR(Args);
-	prepR = REAL(CAR(Args)); // if preprocessing R given
+//	if(*dbg)printf(".");  // REMOVED
+//	Args = CDR(Args);
+//	prepR = REAL(CAR(Args)); // if preprocessing R given
 
 
 	if(*dbg)printf(".");
 	Args = CDR(Args);
-	doDists = INTEGER(CAR(Args)); // if the distances are precalculated and stored
+	doDists = INTEGER(CAR(Args)); // if the distances are to be precalculated and stored
 
 	if(*dbg)printf(".");
 	Args = CDR(Args);
-	doWeights = INTEGER(CAR(Args)); // if the correction weights for connectivity function are precalculated and stored
+	doWeights = INTEGER(CAR(Args)); // if the correction weights for connectivity function are to be precalculated and stored
 	if(*dbg)printf(".");
 
 	Args = CDR(Args);
@@ -68,14 +68,14 @@ SEXP fun_c(SEXP Args)
 	prepGraph = CAR(Args); // possibly precalculated graph.
 	prepG = 1- INTEGER(getListElement(prepGraph,"isnull"))[0];
 
-	if(*dbg)printf("done.%i\n",prepG);
+	if(*dbg)printf("done.\n");
 	par = pR0;
 
 
 
 	//	void Init(Pp *pp0, double *par, double *prepR, int *doDists, int *toroidal, int *dbg );
-	if(*dbg)printf("Init graph...");
-	graph.Init(&pp, gtype, par, prepR, doDists, doWeights, toroidal, dbg);
+	if(*dbg)printf("Init graph [");
+	graph.Init(&pp, gtype, par, &prepR, doDists, doWeights, toroidal, dbg);
 	if(prepG)
 	{
 		std::vector<std::vector<int> > prepNodelist;
@@ -87,7 +87,7 @@ SEXP fun_c(SEXP Args)
 
 
 	//	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *dbg0);
-	if(*dbg)printf("Init fun...");
+	if(*dbg)printf("] done.\nInit fun...");
 	Fun *fun;
 	if(*ftype==4)
 		fun = new Tfun;
@@ -102,7 +102,7 @@ SEXP fun_c(SEXP Args)
 	// ok let's do the calculations
 	if(*dbg)printf("Calculating:\n");
 	fun->calculate();
-	if(*dbg)printf("done.\n");
+	if(*dbg)printf("                                                                                                          \rdone.\n");
 	//phew, done. return the value-vector in SEXP
 	return fun->toSEXP();
 }

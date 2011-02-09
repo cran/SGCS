@@ -23,6 +23,7 @@ public:
 	int    *dbg;
 	double *prepR;
 	int    *gtype;
+	int     given;
 	std::vector<std::vector<int> > nodelist;
 	std::vector<double> distTriangle;
 	std::vector<double> weightTriangle;
@@ -50,8 +51,6 @@ public:
 	void sg_shrink_geometric(double *);
 	void sg_knn();
 	void sg_shrink_knn();
-	void sg_gabriel();
-	void sg_delauney();
 	SEXP toSEXP();
 };
 

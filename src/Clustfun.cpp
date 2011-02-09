@@ -18,9 +18,15 @@ void Clustfun::calculate()
 	valid = 0;
 	n = graph->nodelist.size();
 
+	if((graph->given==1) & (*graph->par < parvec.at(parvec.size()-1)))
+	{
+		if(*dbg)printf("Warning: Given graph has edges computed at less than the requested r-range.\n");
+	}
+
+	if(*dbg)printf("Clustering function:\n");
 	for(iter=parvec.size()-1 ; iter >= 0 ; iter--)
 	{
-		if(*dbg)printf("Clustfun %i/%i: graph[",(int)parvec.size()-iter,(int)parvec.size());
+		if(*dbg)printf("(%i/%i) graph[",(int)parvec.size()-iter,(int)parvec.size());
 		// update graph
 		*graph->oldpar = *graph->par;
 		graph->par = &parvec[iter];
@@ -63,7 +69,7 @@ void Clustfun::calculate()
 
 		if(*dbg)printf("%f",value1);
 		value.at(iter) = value1;
-		if(*this->dbg)printf(" ]\n");
+		if(*this->dbg)printf(" ]                   \r");
 	}
 }
 //EOF

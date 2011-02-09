@@ -11,7 +11,7 @@
  *
  * ****************/
 
-#import "weights.h"
+#include "weights.h"
 
 
 double getWeight(Pp *pp, int *i, int *j)

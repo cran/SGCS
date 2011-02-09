@@ -1,9 +1,9 @@
-#import <math.h>
-#import <R.h>
-#import <Rinternals.h>
-#import <Rdefines.h>
-#import <vector>
-#import "Pp.h"
+#include <math.h>
+#include <R.h>
+#include <Rinternals.h>
+#include <Rdefines.h>
+#include <vector>
+#include "Pp.h"
 
 
 double getWeight(Pp *pp, int *i, int *j);

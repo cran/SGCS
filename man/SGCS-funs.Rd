@@ -17,9 +17,9 @@ Statistical measures based on edges of a geometric graph structure over a given 
     Date: \tab 2009-09-08\cr
     License: \tab GPL v2 or later\cr
 }
-The graph structure is in this version geometric graph, meaning points \code{x} and \code{y} are connected
+The graph given components are used as clusters. In this version we use geometric graph, meaning points \code{x} and \code{y} are connected
 if ||\code{x}-\code{y}||<\code{R} for the given range parameter \code{R}. Notice that in clustering function, the \code{R} equals to 
-the parameter \code{r}.
+the parameter \code{r}. If you have a another clustering structure in mind, you can give the spatgraphs-object using the \code{prepGraph} parameter.
 
 The main function is \code{spatial.graph.cluster.Fun}, but the use of shortcuts \code{confun}, \code{cumconfun} and \code{clustfun} is highly
 encouraged.
@@ -35,7 +35,7 @@ Tfun(X, r=NULL, ...)
 spatial.graph.cluster.Fun(X, r=NULL, funtype=1, funpars=0, 
 						  minusRange=NULL, toroidal=FALSE,
 					      doDists=FALSE, doWeights=FALSE,  
-						  prepRange=0, prepGraph=NULL, dbg=FALSE)
+						  prepGraph=NULL, dbg=FALSE)
 }
 
 \arguments{
@@ -51,9 +51,7 @@ spatial.graph.cluster.Fun(X, r=NULL, funtype=1, funpars=0,
 \item{toroidal}{clustfun, Tfun: Toroidal correction of rectangular window.}
 \item{doDists}{Precalculate distances for faster computation. Be aware of memory consumption n*(n-1).}
 \item{doWeights}{confun,cumconfun: Precalculate translation correction weights for faster computation. Be aware of memory consumption O(n\^2).}
-\item{prepRange}{Preparation distance: If >0, precalculate a graph, from which it is easier to find needed connections. Useful with 
-             more complicated neighbourhoods than just the geometric (Maybe added in the future).}
-\item{prepGraph}{An optional graph-object from spatgraphs to be used as basis for finding connections between points. Good for big datasets.}
+\item{prepGraph}{An optional graph-object from spatgraphs to be used as the component division of the points.}
 \item{dbg}{Print additional messages.}
 }
 

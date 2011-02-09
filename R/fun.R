@@ -9,7 +9,7 @@
 spatial.graph.cluster.Fun<-function(X, r=NULL, funtype=1, funpars=0, 
 									minusRange=NULL, toroidal=FALSE,
 									doDists=FALSE, doWeights=FALSE,  
-									prepRange=0, prepGraph=NULL, dbg=FALSE)
+									prepGraph=NULL, dbg=FALSE)
 # funtypes:
 #	1 connectivity function
 #   2 cumulative connectivity function
@@ -29,7 +29,7 @@ spatial.graph.cluster.Fun<-function(X, r=NULL, funtype=1, funpars=0,
 	typei<-which(graph_type==nGRAPHS)-1 # correction of index for c
 		
 	# check that prepGraph, if one given, is of class sg from 'spatgraphs'
-	if(class(prepGraph)!="sg" & !is.null(prepGraph) )stop("Prepared graph is not of type 'sg'.") 
+	if(class(prepGraph)!="sg" & !is.null(prepGraph) )stop("Prepared component defining graph is not of type 'sg'.") 
 	if(!is.null(prepGraph))
 	{
 		note<-paste(note,"prepGraph given, type",prepGraph$gtype,", par",paste(prepGraph$parameters,collapse=","),";")
@@ -67,7 +67,6 @@ spatial.graph.cluster.Fun<-function(X, r=NULL, funtype=1, funpars=0,
 			as.numeric(r), 
 			as.integer(funtype),
 			as.integer(toroidal),
-			as.numeric(prepRange),
 			as.integer(doDists),
 			as.integer(doWeights),
 			as.integer(included),

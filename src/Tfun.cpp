@@ -11,13 +11,19 @@ Tfun::~Tfun()
 void Tfun::calculate()
 {
 	int iter, n, i, j, k, m, valid, ti, ni;
-	double  ci, value1;
+	double value1;
 
 	n = graph->nodelist.size();
 
+	if((graph->given==1) & (*graph->par < parvec.at(parvec.size()-1)) )
+	{
+		if(*dbg)printf("Warning: Given graph has edges computed at less than the requested r-range.\n");
+	}
+
+	if(*dbg)printf("Triplet intensity function T:\n");
 	for(iter=parvec.size()-1 ; iter >= 0 ; iter--)
 	{
-		if(*dbg)printf("Tfun %i/%i: graph[",(int)parvec.size()-iter,(int)parvec.size());
+		if(*dbg)printf("(%i/%i) graph[",(int)parvec.size()-iter,(int)parvec.size());
 		// update graph
 		*graph->oldpar = *graph->par;
 		graph->par = &parvec[iter];
@@ -56,7 +62,7 @@ void Tfun::calculate()
 		if(valid>0) value1 = value1 / (double) valid; // mean sum(triplets(i))
 		if(*dbg)printf("%f",value1);
 		value.at(iter) = value1;
-		if(*this->dbg)printf(" ]\n");
+		if(*this->dbg)printf("]                 \r");
 	}
 }
 //EOF

@@ -1,9 +1,9 @@
-#import <math.h>
-#import <R.h>
-#import <Rinternals.h>
-#import <Rdefines.h>
-#import <vector>
-#import "Pp.h"
+#include <math.h>
+#include <R.h>
+#include <Rinternals.h>
+#include <Rdefines.h>
+#include <vector>
+#include "Pp.h"
 
 //double getDist0(double *x, double *y, double *z, int *n, int *i, int *j, std::vector<double> *dist);
 double getDist(Pp *pp, int *i, int *j, int *toroidal);

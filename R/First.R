@@ -1,5 +1,5 @@
 
-.First.lib <- function(lib, pkg) {
+.onLoad <- function(lib, pkg) {
     library.dynam("SGCS", pkg, lib)
     v <- read.dcf(file=system.file("DESCRIPTION", package="SGCS"),
                   fields="Version")
