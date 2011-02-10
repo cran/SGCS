@@ -1,3 +1,6 @@
+v1.6
+ - fix an error of mixing float and double in pow-call (solaris error)
+ 
 v1.5
  - clean up warnings given by CRAN build check
  
