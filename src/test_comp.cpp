@@ -21,22 +21,22 @@ SEXP test_components_c(SEXP Args)
 //start parsing the args
 	Args = CDR(Args);
 	dbg = INTEGER(CAR(Args)); // if debug messages
-	if(*dbg)printf("Parsing parameter:");
+	if(*dbg) Rprintf("Parsing parameter:");
 
 	Args = CDR(Args);
 	pp.Init(CAR(Args)); // init pp
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	gtype = INTEGER(CAR(Args)); //what type of graph
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	par = REAL(CAR(Args)); //graph par
 
 
 	//	void Init(Pp *pp0, double *par, double *prepR, int *doDists, int *toroidal, int *dbg );
-	if(*dbg)printf("Init graph...");
+	if(*dbg) Rprintf("Init graph...");
 	graph.Init(&pp, gtype, par, prepR, doDists, doDists, toroidal, dbg);
 	graph.sg_calc();
 	components.calculate(&graph);

@@ -13,10 +13,7 @@ Connectivity function, Cumulative Connectivity function and Clustering Function.
 
 \description{
 Statistical measures based on edges of a geometric graph structure over a given point pattern data.
-  \tabular{ll}{
-    Date: \tab 2009-09-08\cr
-    License: \tab GPL v2 or later\cr
-}
+
 The graph given components are used as clusters. In this version we use geometric graph, meaning points \code{x} and \code{y} are connected
 if ||\code{x}-\code{y}||<\code{R} for the given range parameter \code{R}. Notice that in clustering function, the \code{R} equals to 
 the parameter \code{r}. If you have a another clustering structure in mind, you can give the spatgraphs-object using the \code{prepGraph} parameter.
@@ -61,11 +58,13 @@ Object of class \code{fv}, see \code{spatstat} for details. Has plot, envelope e
 \author{
 Tuomas Rajala\cr
 University of Jyvaskyla, Finland\cr
-tuomas.a.rajala@jyu.fi
+tuomas.rajala@iki.fi
 }
 
 \references{
-Rajala, Penttinen: Spatial clustering and graph feature statistics (working title).
+Rajala, Penttinen: Spatial clustering and graph based statistical features, JYU preprints, 2010.
+
+
 Schladitz, Baddeley: A Third order point process characteristic, SJS, vol 27, 657-671, 2000.
 }
 

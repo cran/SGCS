@@ -17,19 +17,19 @@ void Tfun::calculate()
 
 	if((graph->given==1) & (*graph->par < parvec.at(parvec.size()-1)) )
 	{
-		if(*dbg)printf("Warning: Given graph has edges computed at less than the requested r-range.\n");
+		if(*dbg) Rprintf("Warning: Given graph has edges computed at less than the requested r-range.\n");
 	}
 
-	if(*dbg)printf("Triplet intensity function T:\n");
+	if(*dbg) Rprintf("Triplet intensity function T:\n");
 	for(iter=parvec.size()-1 ; iter >= 0 ; iter--)
 	{
-		if(*dbg)printf("(%i/%i) graph[",(int)parvec.size()-iter,(int)parvec.size());
+		if(*dbg) Rprintf("(%i/%i) graph[",(int)parvec.size()-iter,(int)parvec.size());
 		// update graph
 		*graph->oldpar = *graph->par;
 		graph->par = &parvec[iter];
 		graph->sg_calc();
 
-		if(*dbg)printf("] Value[ ");
+		if(*dbg) Rprintf("] Value[ ");
 
 		// calc index
 		value1 = 0.0;
@@ -60,9 +60,9 @@ void Tfun::calculate()
 
 		}// end for all points
 		if(valid>0) value1 = value1 / (double) valid; // mean sum(triplets(i))
-		if(*dbg)printf("%f",value1);
+		if(*dbg) Rprintf("%f",value1);
 		value.at(iter) = value1;
-		if(*this->dbg)printf("]                 \r");
+		if(*this->dbg) Rprintf("]                 \r");
 	}
 }
 //EOF

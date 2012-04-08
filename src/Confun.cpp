@@ -38,8 +38,8 @@ void Confun::calculate()
 
 	if(*dbg)
 	{
-		if(*ftype==1)printf("Connectivity function, R=%f, h=%f:",fpar[0],fpar[1]);
-		else printf("Cumulative connectivity function, R=%f:",fpar[0]);
+		if(*ftype==1) Rprintf("Connectivity function, R=%f, h=%f:",fpar[0],fpar[1]);
+		else Rprintf("Cumulative connectivity function, R=%f:",fpar[0]);
 	}
 
 	Components components; // start determining the pathwise connections, x~y
@@ -47,21 +47,21 @@ void Confun::calculate()
 	// calc the graph
 	if(graph->given != 1)
 	{
-		if(*dbg)printf("\ngraph[");
+		if(*dbg) Rprintf("\ngraph[");
 		*graph->par = fpar[0];
 		*graph->oldpar = *graph->par;
 		graph->sg_calc();
-		if(*dbg)printf("] ");
+		if(*dbg) Rprintf("] ");
 	}
-	if(*dbg)printf("\ncomponents[");
+	if(*dbg) Rprintf("\ncomponents[");
 	components.calculate(graph);
 	if(*graph->doWeights)
 	{
-		if(*dbg)printf("] weights[");
+		if(*dbg) Rprintf("] weights[");
 			graph->precalculate_weights();
 	}
 
-	if(*dbg)printf("] values:\n");
+	if(*dbg) Rprintf("] values:\n");
 
 	n=graph->nodelist.size();
 	rn = (int)parvec.size();
@@ -87,9 +87,9 @@ void Confun::calculate()
 		}
 		if(*ftype==2) alaosa=0.5;
 		value.at(iter)=ylaosa/alaosa;
-		if(*dbg) printf("\r %i/%i  ",iter+1,rn);
+		if(*dbg) Rprintf("\r %i/%i  ",iter+1,rn);
 	}
-	if(*dbg) printf("\n");
+	if(*dbg) Rprintf("\n");
 }
 
 

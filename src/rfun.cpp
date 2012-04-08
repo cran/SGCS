@@ -20,61 +20,61 @@ SEXP fun_c(SEXP Args)
 //start parsing the args
 	Args = CDR(Args);
 	dbg = INTEGER(CAR(Args)); // if debug messages
-	if(*dbg)printf("Parsing parameter:");
+	if(*dbg) Rprintf("Parsing parameter:");
 
 	Args = CDR(Args);
 	pp.Init(CAR(Args)); // init pp
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	fpar = REAL(CAR(Args)); // additional function parameters.
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	gtype = INTEGER(CAR(Args)); //what type of graph
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	parvec = REAL(CAR(Args)); // parvec
 	parn = length(CAR(Args));
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	ftype = INTEGER(CAR(Args)); //what type of function
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	toroidal = INTEGER(CAR(Args)); // if toroidal correction
 
-//	if(*dbg)printf(".");  // REMOVED
+//	if(*dbg) Rprintf(".");  // REMOVED
 //	Args = CDR(Args);
 //	prepR = REAL(CAR(Args)); // if preprocessing R given
 
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	doDists = INTEGER(CAR(Args)); // if the distances are to be precalculated and stored
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	doWeights = INTEGER(CAR(Args)); // if the correction weights for connectivity function are to be precalculated and stored
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 
 	Args = CDR(Args);
 	incl = INTEGER(CAR(Args)); // the inclusion vector
 
-	if(*dbg)printf(".");
+	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	prepGraph = CAR(Args); // possibly precalculated graph.
 	prepG = 1- INTEGER(getListElement(prepGraph,"isnull"))[0];
 
-	if(*dbg)printf("done.\n");
+	if(*dbg) Rprintf("done.\n");
 	par = pR0;
 
 
 
 	//	void Init(Pp *pp0, double *par, double *prepR, int *doDists, int *toroidal, int *dbg );
-	if(*dbg)printf("Init graph [");
+	if(*dbg) Rprintf("Init graph [");
 	graph.Init(&pp, gtype, par, &prepR, doDists, doWeights, toroidal, dbg);
 	if(prepG)
 	{
@@ -87,7 +87,7 @@ SEXP fun_c(SEXP Args)
 
 
 	//	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *dbg0);
-	if(*dbg)printf("] done.\nInit fun...");
+	if(*dbg) Rprintf("] done.\nInit fun...");
 	Fun *fun;
 	if(*ftype==4)
 		fun = new Tfun;
@@ -97,12 +97,12 @@ SEXP fun_c(SEXP Args)
 		fun = new Confun;
 
 	fun->Init(&graph, parvec, &parn, gtype, ftype, fpar, incl, dbg);
-	if(*dbg)printf("done.\n");
+	if(*dbg) Rprintf("done.\n");
 
 	// ok let's do the calculations
-	if(*dbg)printf("Calculating:\n");
+	if(*dbg) Rprintf("Calculating:\n");
 	fun->calculate();
-	if(*dbg)printf("                                                                                                          \rdone.\n");
+	if(*dbg) Rprintf("                                                                                                          \rdone.\n");
 	//phew, done. return the value-vector in SEXP
 	return fun->toSEXP();
 }

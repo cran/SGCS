@@ -32,7 +32,7 @@ double Graph::Weight2(int *i, int *j)
 /********************************************************************************************/
 void Graph::Init(Pp *pp0, int *gtype0, double *par0, double *prepR0, int *doDists0, int *doWeights0, int *toroidal0, int *dbg0)
 {
-//	if(*dbg0)printf("intializing graph-object: ");
+//	if(*dbg0) Rprintf("intializing graph-object: ");
 
 	pp = pp0;
 	par=par0;prepR=prepR0;
@@ -51,14 +51,14 @@ void Graph::Init(Pp *pp0, int *gtype0, double *par0, double *prepR0, int *doDist
 	pWeight = &Graph::Weight1;  // calculate anew every time
 	if(*doDists)  // distance triangle
 	{
-		if(*dbg)printf("Precalculating distances...");
+		if(*dbg) Rprintf("Precalculating distances...");
 		calcDists(pp, pdists,toroidal);
 		pDist = &Graph::Dist2;   // retrieve from distTriangle
-		if(*dbg)printf("ok. ");
+		if(*dbg) Rprintf("ok. ");
 	}
 
 
-//	if(*dbg)printf("done.\n");
+//	if(*dbg) Rprintf("done.\n");
 
 }
 /********************************************************************************************/
@@ -80,12 +80,12 @@ double Graph::Weight(int *i, int *j)
 /********************************************************************************************/
 void Graph::setNodelist(std::vector<std::vector<int> > *nodelist_new)
 {
-	if(*dbg)printf("Restoring given edges...");
+	if(*dbg) Rprintf("Restoring given edges...");
 	nodelist.clear();
 	for(int i=0;i<(int)nodelist_new->size();i++)
 		nodelist.push_back(nodelist_new->at(i));
 	given = 1;
-	if(*dbg)printf("ok. ");
+	if(*dbg) Rprintf("ok. ");
 }
 /********************************************************************************************/
 SEXP Graph::toSEXP()
@@ -122,9 +122,9 @@ void Graph::sg_calc()
 	// preprocess if requested
 	if(prepR[0]>0 && *oldpar<= *par )
 	{
-		if(*dbg)printf("Preprocessing[");
+		if(*dbg) Rprintf("Preprocessing[");
 		this->sg_geometric(prepR);
-		if(*dbg)printf("] ok. ");
+		if(*dbg) Rprintf("] ok. ");
 	}
 	if(*gtype==0)
 	{
@@ -150,7 +150,7 @@ void Graph::sg_geometric()
 
 void Graph::sg_geometric(double *R)
 {
-	if(*dbg)printf("Geometric (R=%f):",*R);
+	if(*dbg) Rprintf("Geometric (R=%f):",*R);
 	int i,j;
 	double dist;
 	for(i=0;i<(*pp->n-1);i++)
@@ -162,12 +162,12 @@ void Graph::sg_geometric(double *R)
 				nodelist[j].push_back(i+1);
 			}
 		}
-	if(*dbg)printf(" Ok.");
+	if(*dbg) Rprintf(" Ok.");
 }
 
 void Graph::sg_shrink_geometric(double *R)
 {
-	if(*dbg)printf("Geometric (R=%f) (shrinking):",*R);
+	if(*dbg) Rprintf("Geometric (R=%f) (shrinking):",*R);
 	int i,j,j0;
 	double dist;
 	std::vector<int> *node;
@@ -185,7 +185,7 @@ void Graph::sg_shrink_geometric(double *R)
 		for (j = 0; j < (int)node->size(); ++j) this->nodelist[i].push_back(node->at(j));
 		delete node;
 	}
-	if(*dbg)printf(" Ok.");
+	if(*dbg) Rprintf(" Ok.");
 }
 /********************************************************************************************/
 void Graph::sg_knn()
@@ -198,7 +198,7 @@ void Graph::sg_knn()
 
 	if(*prepR==0)// if not preprocessed
 	{
-		if(*dbg)printf("%i-nn: ",*k);
+		if(*dbg) Rprintf("%i-nn: ",*k);
 		int n = *pp->n;
 		double *dists2_i, *dists2_i2;
 		dists2_i = new double[n];
@@ -218,14 +218,14 @@ void Graph::sg_knn()
 		}
 	}
 	else{ //preprocessed
-		if(*dbg)printf("%i-nn (shrinking):",(int)*par);
+		if(*dbg) Rprintf("%i-nn (shrinking):",(int)*par);
 		double *dists2_i, *dists2_i2;
 		for(i=0;i<*pp->n;i++) //for each point
 		{
 			node = new std::vector<int>;
 			dists2_i = new double [nodelist[i].size()];
 			dists2_i2 = new double [nodelist[i].size()];
-			if((int)nodelist[i].size()<*k){ printf("\n preprocessing R too small, not enough neighbours (point #%i)!!\n",i+1); return;}
+			if((int)nodelist[i].size()<*k){ Rprintf("\n preprocessing R too small, not enough neighbours (point #%i)!!\n",i+1); return;}
 			for(l=	0;l< (int)nodelist[i].size();l++)
 			{
 				j = nodelist[i][l]-1;
@@ -247,7 +247,7 @@ void Graph::sg_knn()
 			delete[] dists2_i2;
 		}
 	}
-	 if(*dbg)printf(" Ok.");
+	 if(*dbg) Rprintf(" Ok.");
 }
 
 void Graph::sg_shrink_knn()

@@ -23,7 +23,7 @@ void Components::calculate(Graph *graph)
 	std::vector<std::vector<int> > complist;
 	complist.resize(n);
 
-	if(*graph->dbg)printf("grouping, ");
+	if(*graph->dbg) Rprintf("grouping, ");
 	for(i=0; i < n; i++)
 	{
 		complist.at(i).clear();
@@ -36,7 +36,7 @@ void Components::calculate(Graph *graph)
 
 	loop=1;
 	d=0;
-	if(*graph->dbg)printf("sorting, ");
+	if(*graph->dbg) Rprintf("sorting, ");
 	i=0;
 	while(loop)
 	{
@@ -81,7 +81,7 @@ void Components::calculate(Graph *graph)
 
 	componentlist.clear();
 
-	if(*graph->dbg)printf("cleaning");
+	if(*graph->dbg) Rprintf("cleaning");
 	x=0;
 	for(i=0; i< n ; i++)
 	{
@@ -100,7 +100,7 @@ void Components::calculate(Graph *graph)
 		}
 //		delete p;
 	}
-	if(*graph->dbg)printf(" (x=%i)ok ",x);
+	if(*graph->dbg) Rprintf(" (x=%i)ok ",x);
 }
 
 

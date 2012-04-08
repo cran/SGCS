@@ -13,11 +13,6 @@ Spatial point process statistics based on a geometric graph.
 \description{
 Three statistical spatial point pattern measures, based on a graph structure over the point pattern data.
 
-  \tabular{ll}{
-    Date: \tab 2009-09-08\cr
-    License: \tab GPL v2 or later\cr
-  }
-
 \preformatted{
 Functions
 ------------------
@@ -38,11 +33,12 @@ The package currently supports only geometric graph, but such graphs as k-neares
 \author{
 Tuomas Rajala\cr
 University of Jyvaskyla, Finland\cr
-tuomas.a.rajala@jyu.fi
+tuomas.rajala@iki.fi
 }
 
 \references{
-Rajala, Penttinen: Spatial clustering and graph feature statistics (working title).
+Rajala, Penttinen: Spatial clustering and graph based statistical features, JYU preprints, 2010.
+
 Schladitz, Baddeley: A Third order point process characteristic, SJS, vol 27, 657-671, 2000.
 }
 
