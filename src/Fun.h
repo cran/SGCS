@@ -28,16 +28,19 @@ public:
 	int *gtype; // atm only 0 = geometric
 	int *ftype;
 	int *included;
+  int *dominus;
 	double *fpar;
 	int *dbg;
 	Fun();
 	virtual ~Fun();
-	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *included0, int *dbg0);
+	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *included0, int *dominus0, int *dbg0);
 	SEXP toSEXP();
 	virtual	void calculate(){};
 	virtual void calculateC(){};
 	virtual void calculateCC(){};
 	virtual void calculateT(){};
+  void update_inclusion();
+  void update_inclusion(double R);
 };
 
 #endif /*FUN_H_*/

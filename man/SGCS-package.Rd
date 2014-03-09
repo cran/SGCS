@@ -20,6 +20,7 @@ confun      -  Connectivity function
 cumconfun   -  Cumulative connectivity function
 clustfun    -  Clustering function
 Tfun        -  Triplet intensity function T
+Kfun        -  Ripley's K-function
  }
 
 The connectivity function estimates the probability that two points distance r-apart share a graph component. Cumulative 

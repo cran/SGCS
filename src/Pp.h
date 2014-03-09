@@ -14,7 +14,8 @@ public:
 	double *z;
 	int m;
 	int *n;
-	int *type;
+	double *mark;
+  double *bdist;
 	int s;
 	int *S;
 	std::vector<double > lambdas;
@@ -23,7 +24,7 @@ public:
 	double *zlim;
 	Pp();
 	virtual ~Pp();
-	void Init(double *x, double *y, double *z, int *type, int *n, double *xlim, double *ylim, double *zlim);
+	void Init(double *x, double *y, double *z, int *type, double *mass, int *n, double *xlim, double *ylim, double *zlim);
 	void Init(SEXP);
 };
 

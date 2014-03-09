@@ -9,7 +9,7 @@ Fun::~Fun()
 }
 
 
-void Fun::Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar0, int *included0, int *dbg0)
+void Fun::Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar0, int *included0, int *dominus0, int *dbg0)
 {
 	int i;
 	graph = g0;
@@ -23,7 +23,30 @@ void Fun::Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpa
 	ftype = ft;
 	fpar = fpar0;
 	dbg = dbg0;
+  dominus = dominus0;
 }
+
+void Fun::update_inclusion() {
+  int i;
+  if(this->dominus) {
+    for(i=0; i < *graph->pp->n ; i++) {
+      if(graph->pp->bdist[i] < *this->graph->par) this->included[i] = 0;
+      else this->included[i] = 1;
+    }
+  }
+}
+
+
+void Fun::update_inclusion(double R) {
+  int i;
+  if(this->dominus) {
+    for(i=0; i < *graph->pp->n ; i++) {
+      if(graph->pp->bdist[i] < R) this->included[i] = 0;
+      else this->included[i] = 1;
+    }
+  }
+}
+
 
 
 SEXP Fun::toSEXP()

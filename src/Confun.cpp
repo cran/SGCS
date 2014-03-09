@@ -70,6 +70,9 @@ void Confun::calculate()
 		alaosa=0.0;
 		ylaosa=0.0;
 		okpairs = 0;
+    // update inclusion, in case of border correction
+    this->update_inclusion(parvec.at(iter));
+    
 		for( i=0 ; i<(n-1) ; i++ )
 		{
 			if(this->included[i])

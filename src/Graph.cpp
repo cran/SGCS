@@ -157,7 +157,7 @@ void Graph::sg_geometric(double *R)
 		for(j=i+1;j<*pp->n;j++)
 		{
 			dist = (this->*pDist)(&i,&j);
-			if(dist<*R){
+			if(dist<=*R){
 				nodelist[i].push_back(j+1);
 				nodelist[j].push_back(i+1);
 			}
@@ -178,7 +178,7 @@ void Graph::sg_shrink_geometric(double *R)
 		{
 			j0 = nodelist[i][j]-1;
 			dist = (this->*pDist)(&i,&j0);
-			if(dist<*R)
+			if(dist<=*R)
 				node->push_back(j0+1);
 		}
 		nodelist[i].clear();

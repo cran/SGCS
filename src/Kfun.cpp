@@ -1,14 +1,14 @@
-#include "Tfun.h"
+#include "Kfun.h"
 
-Tfun::Tfun()
+Kfun::Kfun()
 {
 }
 
-Tfun::~Tfun()
+Kfun::~Kfun()
 {
 }
 
-void Tfun::calculate()
+void Kfun::calculate()
 {
 	int iter, n, i, j, k, m, valid, ti, ni;
 	double value1;
@@ -20,7 +20,7 @@ void Tfun::calculate()
 		if(*dbg) Rprintf("Warning: Given graph has edges computed at less than the requested r-range.\n");
 	}
 
-	if(*dbg) Rprintf("Triplet intensity function T:\n");
+	if(*dbg) Rprintf("Ripley's K function:\n");
 	for(iter=parvec.size()-1 ; iter >= 0 ; iter--)
 	{
 		if(*dbg) Rprintf("(%i/%i) graph[",(int)parvec.size()-iter,(int)parvec.size());
@@ -40,28 +40,10 @@ void Tfun::calculate()
 		if(this->included[i])
 		{
 			valid++;
-			ti=0;
-			ni=graph->nodelist.at(i).size();
-			if(ni>1) // number of triangles with i as corner
-			{
-				for(j=0; j < ni-1; j++)
-					for(k=j+1; k < ni; k++)
-					{
-						for(m=0; m < (int)graph->nodelist.at(graph->nodelist.at(i).at(j)-1).size(); m++)
-						{
-							if(graph->nodelist.at(graph->nodelist.at(i).at(j)-1).at(m) == graph->nodelist.at(i).at(k))
-							{
-								ti++;
-								break;
-							}
-						}
-					}
-
-				value1 = value1 + ti; // sum(triplets(i))
-			} // end of triangle calculation
-
+			ni = graph->nodelist.at(i).size();
+			value1 = value1 + ni;
 		}// end for all points
-		if(valid>0) value1 = value1 / (double) valid; // mean sum(triplets(i))
+		if(valid>0) value1 = value1 / (double) valid;
 		if(*dbg) Rprintf("%f",value1);
 		value.at(iter) = value1;
 		if(*this->dbg) Rprintf("]                 \r");

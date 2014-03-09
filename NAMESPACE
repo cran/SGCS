@@ -1,6 +1,6 @@
-export(confun, cumconfun, clustfun, Tfun, 
+export(confun, cumconfun, clustfun, Tfun, Kfun,
        spatial.graph.cluster.Fun
 )
 
 useDynLib(SGCS)
-	   
+import(spatstat)

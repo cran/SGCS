@@ -13,7 +13,6 @@ public:
 	double (Confun::*pK)(double *r, int *i, int *j, double *fpar);
 	double K1(double *r, int *i, int *j, double *fpar);
 	double K2(double *r, int *i, int *j, double *fpar);
-
 };
 
 #endif /*CONFUN_H_*/

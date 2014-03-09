@@ -11,13 +11,21 @@ clustfun<-function(X, r=NULL, ...)
 	res<-spatial.graph.cluster.Fun(X, r=r, funtype=3, ...)
 	
 	# theoretical value depends on the mean degree:
-	mdeg<-function(l,r) pi*l*r^2
-	sum0<-summary(X)
-	l<-sum0$int
-	theo<-(1-exp(-mdeg(l,res$r))*(1+mdeg(l,res$r)))*(1-3*sqrt(3)/(4*pi))
+  dim <- if(is.null(X$z)) 2 else 3
+	if(dim == 2){
+    mdeg<-function(l,r) pi*l*r^2
+	  l <- X$n/prod(c(diff(X$window$x), diff(X$window$y)))
+    cp <- (1-3*sqrt(3)/(4*pi))
+	}
+  else{
+    mdeg<-function(l,r) l*4*pi*r^3/3
+    l <- X$n/prod(c(diff(X$window$x), diff(X$window$y), diff(X$window$z)))
+    cp <- 5/9
+  }
+	theo<-(1-exp(-mdeg(l, res$r))*(1+mdeg(l, res$r))) * cp
 	
 	# create the fv object
-	c.final<-fv( data.frame(c=res$v, r=res$r,theo=theo),
+	c.final<-fv( data.frame(c=res$v, r=res$r, theo=theo),
 			argu = "r",
 			alim = range(res$r),
 			ylab = substitute(c(r),NULL),

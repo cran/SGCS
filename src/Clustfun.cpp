@@ -31,7 +31,9 @@ void Clustfun::calculate()
 		*graph->oldpar = *graph->par;
 		graph->par = &parvec[iter];
 		graph->sg_calc();
-
+    // update inclusion, in case of border correction
+    this->update_inclusion();
+    
 		if(*dbg) Rprintf("] Value[ ");
 
 		// calc index

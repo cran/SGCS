@@ -4,6 +4,7 @@
 \alias{cumconfun}
 \alias{clustfun}
 \alias{Tfun}
+\alias{Kfun}
 \alias{minusID.sg}
 \alias{minusID.seg}
 \alias{W.area}
@@ -30,9 +31,10 @@ cumconfun(X, r=NULL, R=NULL, ...)
 clustfun(X, r=NULL, ...)
 Tfun(X, r=NULL, ...)
 spatial.graph.cluster.Fun(X, r=NULL, funtype=1, funpars=0, 
-						  minusRange=NULL, toroidal=FALSE,
-					      doDists=FALSE, doWeights=FALSE,  
-						  prepGraph=NULL, dbg=FALSE)
+minusRange=NULL, toroidal=FALSE,
+useMinusCorrection=TRUE,
+doDists=FALSE, doWeights=FALSE,  
+prepGraph=NULL, dbg=FALSE)
 }
 
 \arguments{
@@ -45,6 +47,7 @@ spatial.graph.cluster.Fun(X, r=NULL, funtype=1, funpars=0,
 \item{funtype}{(shortcuts handle) Which function to calculate. confun=1, cumconfun=2, clustfun=3, Tfun=4.}
 \item{funpars}{(shortcuts handle) Additional function parameter(s): confun fpar=c(R,h), cumconfun fpar=R.}
 \item{minusRange}{clustfun, Tfun: Minus-correction parameter. Rectangular window required, NULL means no correction.}
+\item{useMinusCorrection}{If true, the border correction is adaptive to range}
 \item{toroidal}{clustfun, Tfun: Toroidal correction of rectangular window.}
 \item{doDists}{Precalculate distances for faster computation. Be aware of memory consumption n*(n-1).}
 \item{doWeights}{confun,cumconfun: Precalculate translation correction weights for faster computation. Be aware of memory consumption O(n\^2).}
@@ -57,7 +60,6 @@ Object of class \code{fv}, see \code{spatstat} for details. Has plot, envelope e
 }
 \author{
 Tuomas Rajala\cr
-University of Jyvaskyla, Finland\cr
 tuomas.rajala@iki.fi
 }
 
@@ -66,6 +68,17 @@ Rajala, Penttinen: Spatial clustering and graph based statistical features, JYU 
 
 
 Schladitz, Baddeley: A Third order point process characteristic, SJS, vol 27, 657-671, 2000.
+}
+
+\examples{
+set.seed(12345)
+sim <- rcell(nx=15) ## the troublesome cell-model, K-function powerless
+estK <- envelope(sim, r=rvec <- seq(0,0.1, length=30))
+cf <- function(x, ...) clustfun(x, r=rvec)
+estc <- envelope(sim, cf)
+par(mfrow=c(1,2))
+plot(estK)
+plot(estc)
 }
 
 \keyword{ package }

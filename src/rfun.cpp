@@ -3,6 +3,7 @@
 #include "Clustfun.h"
 #include "Confun.h"
 #include "Tfun.h"
+#include "Kfun.h"
 
 
 extern "C" {
@@ -13,7 +14,7 @@ SEXP fun_c(SEXP Args)
 	Pp pp;
 	Graph graph;
 	double prepR=0.0, *fpar, *par, *parvec,R0=0.0, *pR0;
-	int *gtype, *doDists, *doWeights, *toroidal, *ftype, *dbg, parn, *incl, prepG=0;
+	int *gtype, *doDists, *doWeights, *toroidal, *ftype, *dbg, parn, *incl, prepG=0, *useMinusCorrection;
 	SEXP prepGraph;
 	pR0 = &R0;
 
@@ -46,11 +47,6 @@ SEXP fun_c(SEXP Args)
 	Args = CDR(Args);
 	toroidal = INTEGER(CAR(Args)); // if toroidal correction
 
-//	if(*dbg) Rprintf(".");  // REMOVED
-//	Args = CDR(Args);
-//	prepR = REAL(CAR(Args)); // if preprocessing R given
-
-
 	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	doDists = INTEGER(CAR(Args)); // if the distances are to be precalculated and stored
@@ -58,11 +54,15 @@ SEXP fun_c(SEXP Args)
 	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	doWeights = INTEGER(CAR(Args)); // if the correction weights for connectivity function are to be precalculated and stored
-	if(*dbg) Rprintf(".");
-
+	
+  if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	incl = INTEGER(CAR(Args)); // the inclusion vector
 
+  if(*dbg) Rprintf(".");
+	Args = CDR(Args);
+	useMinusCorrection = INTEGER(CAR(Args)); // if the adaptive minus sampling correction is to be used
+	
 	if(*dbg) Rprintf(".");
 	Args = CDR(Args);
 	prepGraph = CAR(Args); // possibly precalculated graph.
@@ -89,14 +89,16 @@ SEXP fun_c(SEXP Args)
 	//	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *dbg0);
 	if(*dbg) Rprintf("] done.\nInit fun...");
 	Fun *fun;
-	if(*ftype==4)
+  if(*ftype==5)
+    fun = new Kfun;
+	else if(*ftype==4)
 		fun = new Tfun;
 	else if(*ftype==3)
 		fun = new Clustfun;
 	else
 		fun = new Confun;
 
-	fun->Init(&graph, parvec, &parn, gtype, ftype, fpar, incl, dbg);
+	fun->Init(&graph, parvec, &parn, gtype, ftype, fpar, incl, useMinusCorrection, dbg);
 	if(*dbg) Rprintf("done.\n");
 
 	// ok let's do the calculations
