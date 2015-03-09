@@ -1,52 +1,47 @@
-#include "Kfun.h"
+#include <R.h>
+#include <vector>
+#include "Pp.h"
+#include "Graph.h"
+#include "Rextras.h"
 
-Kfun::Kfun()
+#define DBG 0
+
+extern "C" {
+  SEXP SGCS_Kfun_c(SEXP Args)
 {
-}
+  //start parsing the args
+  Args = CDR(Args);
+  Pp *pp = new Pp(CAR(Args)); // init pp
+  Args = CDR(Args);
+  double *rvec = REAL(CAR(Args)); // r vector
+  int nrvec = length(CAR(Args));
 
-Kfun::~Kfun()
-{
-}
 
-void Kfun::calculate()
-{
-	int iter, n, i, j, k, m, valid, ti, ni;
-	double value1;
-
-	n = graph->nodelist.size();
-
-	if((graph->given==1) & (*graph->par < parvec.at(parvec.size()-1)) )
-	{
-		if(*dbg) Rprintf("Warning: Given graph has edges computed at less than the requested r-range.\n");
-	}
-
-	if(*dbg) Rprintf("Ripley's K function:\n");
-	for(iter=parvec.size()-1 ; iter >= 0 ; iter--)
-	{
-		if(*dbg) Rprintf("(%i/%i) graph[",(int)parvec.size()-iter,(int)parvec.size());
-		// update graph
-		*graph->oldpar = *graph->par;
-		graph->par = &parvec[iter];
-		graph->sg_calc();
-    // update inclusion, in case of border correction
-    this->update_inclusion();
+  //// setup the main graph object
+  double r0=0, prepr0=0;
+  int gtype = 0, i0=0;
+  Graph graph(pp, gtype, r0, prepr0, i0, DBG);
+  
+  std::vector<double > value(nrvec);
+  // set old par so we start anew
+  graph.oldpar = rvec[nrvec-1]-1;
+  graph.dbg = 0;
+  int i,j,k,l;
+  double v;
+  for(k=nrvec-1; k > -1; k--){
+    graph.par = rvec[k];  
+    graph.sg_calc();
+    v  = 0.0;
+    for(i=0; i < pp->size(); i++){
+      for(j=0; j < graph.nodelist.at(i).size(); j++){
+        l = graph.nodelist.at(i).at(j)-1;
+        v += 1.0/pp->getWeight(&i,&l);
+      }
+    }
+    graph.oldpar = rvec[k];
+    value.at(k) = v;
     
-		if(*dbg) Rprintf("] Value[ ");
-
-		// calc index
-		value1 = 0.0;
-		valid = 0; // how many legit target points
-		for( i=0 ;i < n ; i++ )
-		if(this->included[i])
-		{
-			valid++;
-			ni = graph->nodelist.at(i).size();
-			value1 = value1 + ni;
-		}// end for all points
-		if(valid>0) value1 = value1 / (double) valid;
-		if(*dbg) Rprintf("%f",value1);
-		value.at(iter) = value1;
-		if(*this->dbg) Rprintf("]                 \r");
-	}
+  }
+  return vectorToSEXP(value);
 }
-//EOF
+}

@@ -1,114 +1,64 @@
 #include <R.h>
-#include "Fun.h"
-#include "Clustfun.h"
-#include "Confun.h"
-#include "Tfun.h"
-#include "Kfun.h"
+#include <vector>
+#include "Pp.h"
+#include "Graph.h"
+#include "Rextras.h"
 
+#define DBG 0
 
 extern "C" {
-//	segregationFun(pp, fpar=type, graph_type=graph_type, graph_parvec=parvec, toroidal=toroidal, dbg=dbg, funtype=4, doDists=doDists, prepR=prepR)
-SEXP fun_c(SEXP Args)
+  SEXP SGCS_Rfun_c(SEXP Args)
 {
-
-	Pp pp;
-	Graph graph;
-	double prepR=0.0, *fpar, *par, *parvec,R0=0.0, *pR0;
-	int *gtype, *doDists, *doWeights, *toroidal, *ftype, *dbg, parn, *incl, prepG=0, *useMinusCorrection;
-	SEXP prepGraph;
-	pR0 = &R0;
-
-//start parsing the args
-	Args = CDR(Args);
-	dbg = INTEGER(CAR(Args)); // if debug messages
-	if(*dbg) Rprintf("Parsing parameter:");
-
-	Args = CDR(Args);
-	pp.Init(CAR(Args)); // init pp
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	fpar = REAL(CAR(Args)); // additional function parameters.
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	gtype = INTEGER(CAR(Args)); //what type of graph
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	parvec = REAL(CAR(Args)); // parvec
-	parn = length(CAR(Args));
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	ftype = INTEGER(CAR(Args)); //what type of function
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	toroidal = INTEGER(CAR(Args)); // if toroidal correction
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	doDists = INTEGER(CAR(Args)); // if the distances are to be precalculated and stored
-
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	doWeights = INTEGER(CAR(Args)); // if the correction weights for connectivity function are to be precalculated and stored
-	
-  if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	incl = INTEGER(CAR(Args)); // the inclusion vector
-
-  if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	useMinusCorrection = INTEGER(CAR(Args)); // if the adaptive minus sampling correction is to be used
-	
-	if(*dbg) Rprintf(".");
-	Args = CDR(Args);
-	prepGraph = CAR(Args); // possibly precalculated graph.
-	prepG = 1- INTEGER(getListElement(prepGraph,"isnull"))[0];
-
-	if(*dbg) Rprintf("done.\n");
-	par = pR0;
-
-
-
-	//	void Init(Pp *pp0, double *par, double *prepR, int *doDists, int *toroidal, int *dbg );
-	if(*dbg) Rprintf("Init graph [");
-	graph.Init(&pp, gtype, par, &prepR, doDists, doWeights, toroidal, dbg);
-	if(prepG)
-	{
-		std::vector<std::vector<int> > prepNodelist;
-		VectsxpToVector(getListElement(prepGraph,"edges"), prepNodelist);
-		graph.setNodelist(&prepNodelist);
-		graph.par = REAL(getListElement(prepGraph,"parameters"));
-	}
-
-
-
-	//	void Init(Graph *g0, double *par0, int *parn, int *gt, int *ft, double *fpar, int *dbg0);
-	if(*dbg) Rprintf("] done.\nInit fun...");
-	Fun *fun;
-  if(*ftype==5)
-    fun = new Kfun;
-	else if(*ftype==4)
-		fun = new Tfun;
-	else if(*ftype==3)
-		fun = new Clustfun;
-	else
-		fun = new Confun;
-
-	fun->Init(&graph, parvec, &parn, gtype, ftype, fpar, incl, useMinusCorrection, dbg);
-	if(*dbg) Rprintf("done.\n");
-
-	// ok let's do the calculations
-	if(*dbg) Rprintf("Calculating:\n");
-	fun->calculate();
-	if(*dbg) Rprintf("                                                                                                          \rdone.\n");
-	//phew, done. return the value-vector in SEXP
-	return fun->toSEXP();
+    /// parsing the args ///
+    Args = CDR(Args);
+    Pp *pp = new Pp(CAR(Args)); // init pp
+    Args = CDR(Args);
+    double *rvec = REAL(CAR(Args)); // r vector
+    int nrvec = length(CAR(Args));
+    
+    // edge distances should be computed already
+    
+    //// setup the main graph object
+    double r0=0, prepr0=0;
+    int gtype = 0, i0=0;
+    Graph graph(pp, gtype, r0, prepr0, i0, DBG);
+    
+    // set old par so we start anew
+    graph.oldpar = rvec[nrvec-1]-1;
+    int iter, i,j,m;
+    std::vector<double > value(nrvec);
+    double v, cr, r;
+    int ok, n1, n2, nn, ok2;
+    for(iter=nrvec-1; iter > -1; iter--){
+      r = rvec[iter];
+      graph.par = r;
+      graph.sg_calc();
+      cr = 0.0;
+      ok = 0;
+      for(i=0; i < pp->size(); i++){
+        if(r <= pp->getEdgeDistance(&i)){
+          ok++;
+          nn = graph.nodelist.at(i).size();
+          if(nn>1){
+            v=0.0;
+            for(j=0; j < nn-1; j++){
+              for(m=j+1; m < nn; m++){
+                n1 = graph.nodelist.at(i).at(j)-1;
+                n2 = graph.nodelist.at(i).at(m)-1;
+                if(pp->getDistance(&n1, &n2) < r) v = v + 1.0;
+              }
+            }
+            cr += v / (nn*nn);
+          }
+        }
+      }
+      if(ok > 0) cr = cr / ( (double) ok );
+      value.at(iter) = cr;
+      graph.oldpar = r;
+    }
+    
+    return vectorToSEXP(value);
+  }
 }
 
 
-
-} //extern

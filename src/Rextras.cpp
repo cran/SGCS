@@ -1,10 +1,9 @@
 /***********************************
- * stuff needed by other functions:
- *
- *
- * Tuomas Rajala <tuomas@sokkelo.net>
- *
- *   */
+  SEXP handlers and converters 
+ 
+  Tuomas Rajala <tuomas.rajala@iki.fi>
+ 
+*/
 #include "Rextras.h"
 /*******************************************************/
 SEXP getListElement(SEXP list, const char *str)
@@ -22,12 +21,9 @@ SEXP getListElement(SEXP list, const char *str)
 }
 
 /*******************************************************/
-
-// turn an R-vector-of-int-vectors to C-vector-of-int-vectors
+// turn an R-list-of-int-vectors to C-vector-of-int-vectors
 void VectsxpToVector(SEXP nodelistR, std::vector<std::vector<int> > &result)
 {
-//	std::vector<std::vector<int> > result(length(nodelistR));
-//	std::vector<int> *resnode;
 	SEXP node;
 	PROTECT(nodelistR = coerceVector(nodelistR,VECSXP) );
 	int i,j;
@@ -45,11 +41,10 @@ void VectsxpToVector(SEXP nodelistR, std::vector<std::vector<int> > &result)
 
 /**********************************************************************************/
 
-SEXP vectorToSEXP(std::vector<std::vector<int> > nodelist)
+SEXP vectorOfVectorsToSEXP(std::vector<std::vector<int> > nodelist)
 //transform a std::vector<std::vector<int> > to SEXP, desctructive
 {
 	SEXP graph, *node;
-
 	PROTECT(graph = allocVector(VECSXP, nodelist.size()));
 	int i,j, *p, n;
 	for(i=0;i< (int)nodelist.size();i++)
@@ -70,4 +65,32 @@ SEXP vectorToSEXP(std::vector<std::vector<int> > nodelist)
 	}
 	UNPROTECT(1);
 	return graph;
+}
+
+/**********************************************************************************/
+
+SEXP vectorToSEXP(std::vector<double > vec)
+{
+  SEXP res;
+	PROTECT(res = allocVector(REALSXP, vec.size()));
+  double *pres = REAL(res);
+	int i;
+	for(i=0;i < (int) vec.size();i++) {
+		pres[i] = vec[i];
+	}
+	UNPROTECT(1);
+	return res;
+}
+
+SEXP vectorpToSEXP(std::vector<double > *vec)
+{
+  SEXP res;
+  PROTECT(res = allocVector(REALSXP, vec->size()));
+  double *pres = REAL(res);
+	int i;
+	for(i=0;i < (int) vec->size();i++) {
+		pres[i] = vec->at(i);
+	}
+	UNPROTECT(1);
+	return res;
 }
