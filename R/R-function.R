@@ -1,6 +1,6 @@
 #' Clustering function versio 2
 #' 
-#' Ratio of T and K
+#' Ratio of triplets to pairs^2, motivated by T/K^2.
 #' 
 #' @param x Point pattern
 #' @param r Vector of distances
@@ -54,7 +54,7 @@ Rfun <- function(x, r, correction="border", scaled=FALSE, ...) {
   lam <- x$n/x$area 
   lpr <- lam * Ke
   p  <- 1 - exp(-lpr) * (lpr+1) # p(K>0)
-  theo <- (Te / Ke^2) * p 
+  theo <- (lam^2*Te / (lam*Ke*(lam*Ke+1))) * p 
   # if we scale away the Poisson value
   if(scaled){
     res <- res/theo

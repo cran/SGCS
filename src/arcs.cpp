@@ -15,7 +15,7 @@ std::vector<std::vector<double> > morphoArcs(Graph *graph)
   if(R>0) {
     // if R>0
     for(i=0; i<graph->pp->size(); i++)// compute arcs that overlap circle b(x_i, R/2) 
-    if(graph->pp->included(&i, &Rcheck)){// border correction
+    {//if(graph->pp->included(&i, &Rcheck)){// border correction
       arcsi.clear();
       arcsi2.clear();
       parc = new std::vector<double>;

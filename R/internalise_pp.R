@@ -12,7 +12,7 @@
 #' 
 #' @export
 internalise_pp <- function(x) {
-  dim <- 2
+  #dim <- 2
   ### 2D ppp:
   if(class(x)=="ppp"){
     coord <- as.matrix(coords(x))
@@ -52,12 +52,12 @@ internalise_pp <- function(x) {
     pp$dim <- dim
     pp$n   <- nrow(pp$coord)
     pp$area <- prod( apply(pp$bbox, 2, diff) )#
+    pp$owin <- x$owin
   }
   else if(is.matrix(x) | is.data.frame(x)){ # matrix of coordinates given
     coord <- as.matrix(x)
     bbox <- bounding_box_xy(x)
     pp <- list(coord = coord, bbox=bbox, n=nrow(coord), dim=ncol(coord))
-    pp$dim <- dim
     pp$n   <- nrow(pp$coord)
     pp$area <- prod( apply(pp$bbox, 2, diff) )
   }
@@ -67,7 +67,7 @@ internalise_pp <- function(x) {
   ## some failsafes
   pp$bbox <- pp$bbox + 0.0
   pp$area <- pp$area + 0.0
-  pp$mass <- pp$mass + 0.0
+  # pp$mass <- pp$mass + 0.0
   ## done
   pp
 }

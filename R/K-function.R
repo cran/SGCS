@@ -32,8 +32,9 @@ Kfun <- function(x, r, ...) {
   # scale:
   lambda <- x$n/x$area
   res <- res/lambda^2
+  theo <- r^x$dim * ifelse(x$dim==2, pi, pi*4/3) 
   # make fv suitable
-  C.final<-fv( data.frame(K=res, r=r, theo=rep(NA,length(r))),
+  C.final<-fv( data.frame(K=res, r=r, theo=theo),
                argu = "r",
                alim = range(r),
                ylab = substitute(K(r),NULL),

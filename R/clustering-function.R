@@ -68,12 +68,14 @@ clustfun <- function(x, r, correction="border", scaled=FALSE, ...) {
   c.final<-fv( data.frame(r=r, theo=theo, c=res),
                argu = "r",
                alim = range(r),
-               ylab = substitute(C(r), NULL),
-               desc = c("distance argument r", "Theoretical values unknown", "Clustering Function"),
+               ylab = substitute(c(r), NULL),
+               desc = c("distance argument r", "Theoretical values for Poisson", "Clustering Function"),
                valu = "c",
                fmla = ".~r",
-               fname="c"	
+               fname="c"
   )
   
   c.final
 }
+
+

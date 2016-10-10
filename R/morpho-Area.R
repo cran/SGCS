@@ -6,7 +6,7 @@
 #' @param ... Ignored.
 #' 
 #' @return
-#' The default plotted curve, "af", is relative to lambda * pi * r^2. 
+#' The default plotted curve, "rAF", is relative to lambda * pi * r^2. 
 #' The component "AF" holds the area fraction.
 #' 
 #' @export
@@ -23,12 +23,11 @@ morphoArea <- function(x, r, ...){
   #   ### Border distance for correction
   #   x$edgeDistances <- edge_distance(x)
   #   ### compute
-  #   res <- .External("SGCS_morphoArea_c",
-  #                    x,
-  #                    r,
-  #                    PACKAGE="SGCS"
-  #   )
-  #   
+  resA <- .External("SGCS_morphoArea_c",
+                     x,
+                     r,
+                     PACKAGE="SGCS"
+  )
   ### Use spatstat:
   pp <- internal_to_ppp(x)
   res <- Fest(pp, r=r, correction="border")$rs
@@ -37,18 +36,17 @@ morphoArea <- function(x, r, ...){
   areas <- sapply(windows, area)
   AF <- res
   rAF <- AF/(lambdas * pi * r^2)
-  
   # theoretical for Poisson
   l <- pi*x$n/x$area * r^2
   theo <- (1-exp(-l))/l
   # make fv suitable
-  A.final<-fv( data.frame(r=r, theo=theo, rAF=rAF, AF=AF),
+  A.final<-fv( data.frame(r=r, theo=theo, rAF=rAF, AF2=resA/areas, AF=AF),
                argu = "r",
                alim = range(r),
                ylab = substitute(rAF(r), NULL),
-               desc = c("distance argument r", "Poisson", "Relative area fraction", "Area fraction"),
+               desc = c("distance argument r", "Poisson", "Relative area fraction", "Area fraction", "AF"),
                valu = "rAF",
-               fmla = "cbind(rAF, theo)~r",
+               fmla = "cbind(rAF, rAF2, theo)~r",
                fname="rAF"
   )
   

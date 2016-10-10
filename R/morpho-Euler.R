@@ -23,7 +23,7 @@ morphoEuler <- function(x, r, ...){
   ### Border distance for correction
   x$edgeDistances <- edge_distance(x)
   ### compute
-  res <- .External("SGCS_morphoEuler_c",
+  chi <- .External("SGCS_morphoEuler_c",
                    x,
                    r,
                    PACKAGE="SGCS"
@@ -32,11 +32,11 @@ morphoEuler <- function(x, r, ...){
   pp <- internal_to_ppp(x)
   windows <- lapply(r, erosion, w=pp$window)
   ns <- sapply(windows, function(w) pp[w]$n )
-  lambda <- intensity(pp)
-  E <- res/ns  / lambda
+  E <- (chi/pi)/ns
   
   #E[r==0] <- 0
   # theoretical for Poisson
+  lambda <- intensity(pp)
   l <- pi* lambda * r^2
   theo <- (1-l)*exp(-l)
   # make fv suitable
