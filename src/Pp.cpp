@@ -98,8 +98,8 @@ double Pp::distEuclidian(int *i, int *j)
   if(*i==*j) return 0.0;
 		if(*i>*j) return distEuclidian(j, i);
 			return 	sqrt(
-					pow( getX(i)- getX(j)  ,2.0) +
-					pow( getY(i)- getY(j)  ,2.0));
+					pow( getX(i)- getX(j)  , 2) +
+					pow( getY(i)- getY(j)  , 2));
 }
 /********************************************************************************************/
 double Pp::distToroidal(int *i, int *j)
@@ -107,8 +107,8 @@ double Pp::distToroidal(int *i, int *j)
   if(*i==*j) return 0.0;
 		if(*i>*j) return distToroidal(j, i);
 		return	sqrt(
-	  pow( fmin2( xlim[1]-xlim[0]-fabs(getX(i)-getX(j)) , fabs(getX(i)-getX(j)) ) ,2.0F) +
-		  pow( fmin2( ylim[1]-ylim[0]-fabs(getY(i)-getY(j)) , fabs(getY(i)-getY(j)) ) ,2.0F)   );
+	  pow( fmin2( xlim[1]-xlim[0]-fabs(getX(i)-getX(j)) , fabs(getX(i)-getX(j)) ) , 2) +
+		  pow( fmin2( ylim[1]-ylim[0]-fabs(getY(i)-getY(j)) , fabs(getY(i)-getY(j)) ) ,2)   );
 }
 /********************************************************************************************/
 double Pp::distEuclidian3(int *i, int *j)
@@ -116,9 +116,9 @@ double Pp::distEuclidian3(int *i, int *j)
 	if(*i==*j) return 0.0;
 		if(*i>*j) return distEuclidian3(j, i);
 			return 	sqrt(
-					pow( getX(i)- getX(j)  ,2.0) +
-					pow( getY(i)- getY(j)  ,2.0) +
-					pow( getZ(i)- getZ(j)  ,2.0)   );
+					pow( getX(i)- getX(j)  , 2) +
+					pow( getY(i)- getY(j)  , 2) +
+					pow( getZ(i)- getZ(j)  , 2)   );
 }
 /********************************************************************************************/
 double Pp::distToroidal3(int *i, int *j)
@@ -126,9 +126,9 @@ double Pp::distToroidal3(int *i, int *j)
   if(*i==*j) return 0.0;
 		if(*i>*j) return distToroidal3(j, i);
 		return	sqrt(
-		  pow( fmin2( xlim[1]-xlim[0]-fabs(getX(i)-getX(j)) , fabs(getX(i)-getX(j)) ) ,2.0F) +
-		  pow( fmin2( ylim[1]-ylim[0]-fabs(getY(i)-getY(j)) , fabs(getY(i)-getY(j)) ) ,2.0F) +
-		  pow( fmin2( zlim[1]-zlim[0]-fabs(getZ(i)-getZ(j)) , fabs(getZ(i)-getZ(j)) ) ,2.0F)   );
+		  pow( fmin2( xlim[1]-xlim[0]-fabs(getX(i)-getX(j)) , fabs(getX(i)-getX(j)) ) , 2) +
+		  pow( fmin2( ylim[1]-ylim[0]-fabs(getY(i)-getY(j)) , fabs(getY(i)-getY(j)) ) , 2) +
+		  pow( fmin2( zlim[1]-zlim[0]-fabs(getZ(i)-getZ(j)) , fabs(getZ(i)-getZ(j)) ) , 2)   );
 }
 /********************************************************************************************/
 double Pp::distPrecalculated(int *i, int *j)
