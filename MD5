@@ -1,5 +1,5 @@
-d3776d27b5bcdcafd35bb3cffc0c7e8e *DESCRIPTION
-86031e4e9d0e3268e5e983857350f23a *NAMESPACE
+7b26adf730cce59f899962c8937121c6 *DESCRIPTION
+a4ca1dd7928020ab81aeb0f0984c3134 *NAMESPACE
 0df8d943da95d587a95223384d2cf438 *R/K-function.R
 0e314ab72882c4b3338fe54c4ae0873f *R/R-function.R
 0d4662aabf065e09f4e134a7f51dcf3c *R/T-function.R
@@ -16,7 +16,7 @@ d8a6bcf49d479ed4705770f928904a80 *R/morpho-Area.R
 b0a18b4bfbf2876113e478df58337229 *R/morpho-Euler.R
 af997aa229ec34149aa931ea0f120198 *R/morpho-Length.R
 4dd8cbc0d87886bcbddd50d7684b6213 *R/package.R
-c093c054d4dcda0d324edecad57a9cc2 *R/pairwise-distances.R
+491371d0c03e2bfced3371a79b918c83 *R/pairwise-distances.R
 2135c4e59f863c91525cd7b37a324b85 *R/translation-weights.R
 9625586f1e4e604d45ebf1869f15e73f *man/Kfun.Rd
 1333e5f9c36bd951de80bc82b5b77ca6 *man/Rfun.Rd
@@ -53,6 +53,7 @@ e7d987f6328b043fc34fdb90600e9d9e *src/arcs.h
 45d6de6dd2f7ef8baf98c104908a5692 *src/clustfun.cpp
 79cc6a62e629d86005fd6d781ce846de *src/confun.cpp
 b28e1c4b9ba0966635db60d068932037 *src/getArcs.cpp
+8e2726704c3a37f91512e6bb91689630 *src/init.c
 e5851d4ea208b196df44bb8f7cd4242f *src/morphoArea.cpp
 f71b056dd2689cf7cc24832657a25e8e *src/morphoEuler.cpp
 a9d14155fc0983f914b09055d1cf2d2c *src/morphoLength.cpp

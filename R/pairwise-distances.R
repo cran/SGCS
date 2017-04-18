@@ -11,5 +11,5 @@
 
 pairwise_distances <- function(x, toroidal=FALSE) {
   x <- internalise_pp(x)
-  .External("pairwise_distances_c", x, as.integer(toroidal), package="SGCS")
+  .External("pairwise_distances_c", x, as.integer(toroidal), PACKAGE = "SGCS")
 }
