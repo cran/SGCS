@@ -156,7 +156,7 @@ SEXP Components::toSEXP()
 		PROTECT(*node = allocVector(INTSXP, this->componentlist.at(i).size()) );
 		p = INTEGER(*node);
 		n = this->componentlist.at(i).size();
-		if(n<1) p[0]=NULL;
+		if(n<1) ;//p[0]=NULL;
 		else
 			for(j=0;j<n;j++)
 			{

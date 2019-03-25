@@ -14,4 +14,3 @@ translation_weights(x)
 Translation weights
 Compute the translation edge correction weights
 }
-

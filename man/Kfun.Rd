@@ -23,4 +23,3 @@ See \code{\link[spatstat]{Kest}} for more rigorous implementation in 2D.
 Border correction is translation correction. 
 Support in 3D therefore only for cuboidal windows.
 }
-

@@ -14,4 +14,3 @@ arcs(x, r)
 \description{
 Compute the boundary of disks
 }
-

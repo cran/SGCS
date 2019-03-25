@@ -32,4 +32,3 @@ en <- envelope(rcell(nx=15), fun=Rfun)
 plot(en)
 }
 }
-

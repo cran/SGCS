@@ -14,4 +14,3 @@ Uses bdist.points for ppp objects, otherwise relies on a cuboidal/rectangular wi
 \description{
 Compute the distances from points to observation window edge.
 }
-

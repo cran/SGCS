@@ -24,4 +24,3 @@ Reduced sample border correction.
 \description{
 Dilute pattern with b(o,r) and compute boundary length.
 }
-

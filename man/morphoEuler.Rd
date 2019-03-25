@@ -21,4 +21,3 @@ Reduced sample border correction.
 \description{
 Dilate pattern with b(o,r) and compute the Euler number.
 }
-

@@ -25,4 +25,3 @@ The Ripley's \link[=Kfun]{K}-function is there as well as spatstat does not supp
 The main source for the definitions of connectivity and clustering functions is 
 \strong{Rajala: Spatial clustering and graph based statistical features, JYU preprints, 2010}
 }
-

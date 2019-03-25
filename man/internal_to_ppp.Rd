@@ -12,4 +12,3 @@ internal_to_ppp(x)
 \description{
 Data to spatstat format
 }
-

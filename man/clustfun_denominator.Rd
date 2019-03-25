@@ -24,4 +24,3 @@ Estimate the denominator of clustering function
 \details{
 Support in 3D therefore only for cuboidal windows. (inc. rotated)
 }
-

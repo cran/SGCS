@@ -20,4 +20,3 @@ The component "AF" holds the area fraction.
 \description{
 Dilute pattern with b(o,r) and compute area.
 }
-

@@ -17,4 +17,3 @@ Value is the lower triangle of the distasnce matrix, returned as a vector.
 \description{
 pairwise distances
 }
-

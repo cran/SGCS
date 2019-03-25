@@ -15,4 +15,3 @@ Compute the range vector}
 \description{
 Default range vector
 }
-

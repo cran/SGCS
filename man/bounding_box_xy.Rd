@@ -16,4 +16,3 @@ Compute the bounding window from coordinates
 Rectangular or cuboidal bounding box around coordinates given as
 matrix 'x'. Enlarged with the Ripley and Rasson 1977 method.
 }
-
